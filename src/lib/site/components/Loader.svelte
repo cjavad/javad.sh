@@ -1,40 +1,64 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import { isLoading } from '..';
+	import { onDestroy, onMount } from 'svelte';
+	import isLoading from '../stores/loading';
+    import * as easing from 'svelte/easing';
+	import { tweened } from 'svelte/motion';
 
-	export let progress = 0,
-		size = '10rem',
-		thickness = '0.25rem',
-		duration = 0;
+    const progress = tweened(0, {
+        duration: 1000,
+        easing: easing.cubicOut,
+    });
 
-	export const setProgress = (value: number) => {
-		progress = value;
-	};
+    const unsubscribe = isLoading.subscribe((value) => {
+        if (!value) {
+            progress.set(1, { duration: 1000 });
+        }
+    });
 
-	const smoothLoading = (n: number) => {
-		// Curved loading animation for n seconds
-		// Use easing function to make it smooth
-		const start = performance.now();
-		const ease = (t: number) => t * (2 - t);
-		const frame = (time: number) => {
-			const t = Math.min(1, (time - start) / (n * 1000));
-			setProgress(ease(t) * 100);
-			if (t < 1) {
-				requestAnimationFrame(frame);
-			}
-		};
-		requestAnimationFrame(frame);
-	};
+    // Start loading
+    onMount(() => {
+        // Smootly increase progress using easing
+        progress.set(0.7)
+    });
 
-	onMount(() => {
-		if (duration > 0) {
-			smoothLoading(duration);
-		}
-	});
-
-	$: progress = Math.min(Math.max(progress, 0), 100);
+    onDestroy(() => {
+        unsubscribe();
+    });
 </script>
 
-<div class="radial-progress" style="--value:{progress}; --size: {size}; --thickness: {thickness};">
-	{Math.floor(progress)}%
+<div class="loader-container">
+    <div class="loader" style="opacity: {($progress * 100).toFixed(1)}%;">
+        <span class="text-sm">{($progress * 100).toFixed(22)}</span>
+    </div>
 </div>
+
+
+<style>
+    .loader-container {
+        position: fixed; /* Fixed positioning ensures the loader covers the entire viewport */
+        width: 100%;
+        height: 100%;
+        top: 50%;
+        left: 50%;
+        overflow: hidden; /* Prevents scrolling within the loader */
+        z-index: 9999; /* Ensures the loader is above other content */
+    }
+
+    .loader {
+        position: fixed; /* Relative positioning allows the content to flow normally */
+        width: 120%; /* You can set this to be wider than the viewport */
+        height: 120%;
+        margin-left: -10%; /* Centers the content by adjusting the left margin */
+    }
+
+    span {
+        font-family: 'Libre Barcode 128 Text', cursive;
+        font-size: calc(10rem + 1vw);
+        text-align: center;
+    }
+    .loader-container {
+        position: fixed; /* Fixed positioning ensures the loader covers the entire viewport */
+        overflow: hidden; /* Prevents scrolling within the loader */
+        z-index: 9999; /* Ensures the loader is above other content */
+    }
+</style>

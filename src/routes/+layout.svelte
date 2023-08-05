@@ -1,13 +1,42 @@
 <script lang="ts">
-	import { isLoading } from '$lib/site';
-	import Loader from '$lib/site/components/Loader.svelte';
 	import '../app.css';
+
+	import isLoading from '$lib/site/stores/loading';
+	import Loader from '$lib/site/components/Loader.svelte';
+	import { fade } from 'svelte/transition';
+	import { afterNavigate, beforeNavigate } from '$app/navigation';
+	import Navbar from '$lib/site/components/Navbar.svelte';
+
+    beforeNavigate(() => {
+        isLoading.set(true);
+    });
+
+    afterNavigate(() => {
+        isLoading.set(false);
+    });
+
+    const googleFonts = "https://fonts.googleapis.com/css2?family=Libre+Barcode+128&family=Libre+Barcode+128+Text&family=Rubik+80s+Fade&family=Silkscreen&family=Zilla+Slab:ital,wght@0,300;0,400;0,700;1,300&display=swap";
 </script>
 
-{#if $isLoading}
-<div class="grid h-screen place-items-center">
-    <Loader duration={10} />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=true>
+<link rel="preload" as="style" href={googleFonts}>
+<link rel="stylesheet" href={googleFonts}>
+
+<style>
+    * {
+        font-family: 'Zilla Slab', sans-serif;
+        font-weight: 400;
+    }
+</style>
+
+<div transition:fade>
+    {#if $isLoading}
+        <div out:fade={{ delay: 250 }}>
+            <Loader />
+        </div>
+    {:else}
+        <Navbar />
+        <slot />
+    {/if}
 </div>
-{:else}
-	<slot />
-{/if}
