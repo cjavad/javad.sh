@@ -1,4 +1,3 @@
-import type { BlogPost, BlogPostReference } from '$lib/site/types/blog';
 import { parse } from 'path';
 
 type GlobEntry = {

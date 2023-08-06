@@ -2,32 +2,34 @@
     import Search from 'virtual:icons/material-symbols/search.svg';
     import BlogCard from '$lib/site/components/blog/BlogCard.svelte';
     import type { PageServerData } from './$types';
-	import type { Categories } from '$lib/site/types/blog';
+	import type { Categories } from '$lib/site/blog';
+	import { writable } from 'svelte/store';
+	import { fade } from 'svelte/transition';
+	import BlogList from '$lib/site/components/blog/BlogList.svelte';
 
     export let data: PageServerData;
-    let search: string | null = null;
+    let search = writable('');
     let categories: Categories[] = [];
 
-    async function searchWithFilters() {
-        if (search === null && categories.length === 0) return;
-        const response = await fetch('/blog?' + new URLSearchParams({ search: search || '', categories: categories.join(',') }));
+    async function searchWithFilters(search: string) {
+        const response = await fetch('/blog?' + new URLSearchParams({ search }));
         data = await response.json();
     }
+
+    search.subscribe(searchWithFilters);
 </script>
 
-<div class="mb-10 flex flex-col justify-center items-center">
+<div class="mb-3">
     <div class="flex-none gap-2">
         <div class="relative">
             <Search class="w-6 h-6 absolute left-3 top-3 text-gray-400" />
-            <input on:change={searchWithFilters} bind:value={search} id="search" type="text" placeholder="Search" class="input rounded-xl input-bordered pl-12" />
+            <input bind:value={$search} id="search" type="text" placeholder="Search" class="input pl-12" />
         </div>
     </div>
 </div>
 
-<div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-    {#each data.posts as post}
-        <BlogCard {post} />
-    {/each}
+<div class="min-h-screen flex flex-col items-center">
+    <BlogList posts={data?.posts || []} />
 </div>
 
 <style>

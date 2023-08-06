@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { onDestroy, onMount } from 'svelte';
-	import isLoading from '../stores/loading';
     import * as easing from 'svelte/easing';
 	import { tweened } from 'svelte/motion';
+    
+	import isLoading from '../stores/loading';
 
     const progress = tweened(0, {
         duration: 1000,
@@ -18,7 +19,7 @@
     // Start loading
     onMount(() => {
         // Smootly increase progress using easing
-        progress.set(0.7)
+        progress.set(0.7);
     });
 
     onDestroy(() => {
@@ -27,7 +28,7 @@
 </script>
 
 <div class="loader-container">
-    <div class="loader" style="opacity: {($progress * 100).toFixed(1)}%;">
+    <div class="loader" style="opacity: {easing.expoOut($progress) * 100}%;">
         <span class="text-sm">{($progress * 100).toFixed(22)}</span>
     </div>
 </div>
@@ -58,6 +59,5 @@
     .loader-container {
         position: fixed; /* Fixed positioning ensures the loader covers the entire viewport */
         overflow: hidden; /* Prevents scrolling within the loader */
-        z-index: 9999; /* Ensures the loader is above other content */
     }
 </style>

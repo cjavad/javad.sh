@@ -39,6 +39,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"date-fns": "^2.30.0",
 		"eslint-plugin-svelte": "^2.32.4"
 	}
 }

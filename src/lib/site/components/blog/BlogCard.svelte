@@ -1,48 +1,54 @@
 <script lang="ts">
-	import type { BlogPostReference } from "$lib/site/types/blog";
+	import { format, formatDistance, formatDistanceToNow, parseISO } from "date-fns";
+	import CategoryBagde from "$lib/site/components/blog/CategoryBagde.svelte";
 
     export let post: BlogPostReference;
+    
+    function postTime() {
+        const postDate = new Date(post.date).getTime();
+        return formatDistanceToNow(postDate, { addSuffix: true });
+    }
 </script>
 
-<div class="indicator">
-    <div class="card w-96 bg-base-200 rounded-3xl">
-        {#if new Date(post.date) > new Date(2021, 0, 1)}
-            <span class="indicator-item indicator-top rounded-3xl badge badge-primary">new</span> 
+<div class="card w-96 bg-base-200 rounded-3xl shadow-xl">
+    <a href="/blog/{post.slug}">
+        {#if post.image}
+            <figure>
+                <img src={post.image} alt={post.title} class="rounded-t-3xl" />
+            </figure>
         {/if}
+        <div class="card-body">
+            <h1 class="card-title text-lg font-semibold">
+                {post.title}
+                {#if new Date(post.date).getTime() > new Date().setDate(-30)}
+                    <span class="rounded-3xl badge badge-secondary">new</span> 
+                {/if}
+            </h1>
+            <p>{post.description}</p>
+            <div class="flex gap-2 flex-wrap">
+                {#each post.categories as category}
+                    <CategoryBagde {category} />
+                {/each}
 
-        <a href="/blog/{post.slug}">
-            <div class="card-body">
-                <h2 class="card-title">{post.title}</h2>
-                <p>{post.description}</p>
-                <p>{post.date}</p>
-                <div class="flex gap-1">
-                    {#each post.categories as category}
-                    <a href="/blog/category/{category}" class="badge rounded-3xl badge-accent">{category}</a>
-                    {/each}
-                </div>
-
+                <b class="badge rounded-3xl badge-primary tooltip tooltip-bottom tooltip-info"
+                    data-tip={postTime()}
+                    >
+                    
+                    {format(new Date(post.date).getTime(), 'yyyy/MM/dd')}
+                </b>
             </div>
-        </a>    
-    </div>
+        </div>
+    </a>    
 </div>
-
 
 <style>
     .card {
         max-width: 80vw;
-        transition: transform 0.3s ease, text-shadow 0.3s ease, color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for the tilt and other effects */
+        transition: transform .2s ease, box-shadow .2s ease;
     }
 
     .card:hover {
-        background-color: inherit;
-        transform: rotate(1deg);
-        text-shadow: 0 0 5px #fff, 0 0 20px #fff;
-    }
-
-    /* If card has indicator bagde new apply special hover effect */
-    .card:hover .indicator-top {
-        background-color: inherit;
-        box-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #FFD300, 0 0 20px #ff00de, 0 0 35px #FFD300, 0 0 40px #ff00de;
+        box-shadow: 0 0 1rem 0 rgba(0, 0, 0, .2);
     }
 
     .card-title {
@@ -51,16 +57,18 @@
         transition: text-shadow 0.3s ease, color 0.3s ease; /* Smooth transition for the tilt and other effects */
     }
 
-    .card-title:hover {
-        background-color: inherit;
-    }
-
     .badge {
         font-family: 'Silkscreen', monospace;
         font-size: medium;
     }
 
-    .badge:hover {
-        background-color: inherit;
+    .badge:not(.tooltip) {
+        transition: transform .1s ease, box-shadow .1s ease;
     }
+
+    .badge:hover:not(.tooltip) {
+        transform: scale(1.05);
+        box-shadow: 0 0 1rem 0 rgba(0, 0, 0, .2);
+    }
+
 </style>

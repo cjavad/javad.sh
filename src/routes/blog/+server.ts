@@ -1,7 +1,7 @@
 import { json } from '@sveltejs/kit';
 import { posts } from "$lib/server/posts";
 
-export function GET({ url }) {
+export function GET({ url }: any) {
     const search = url.searchParams.get('search');
 
     return json({

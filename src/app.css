@@ -3,7 +3,11 @@
 @tailwind utilities;
 
 * {
-    font-family: 'Zilla Slab', serif;
+    font-family: 'Roboto', serif;
     font-size: 1.15rem;
     line-height: 1.75rem;
+}
+
+:root {
+    transition: background-color 0.5s ease-in-out;
 }
