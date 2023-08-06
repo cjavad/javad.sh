@@ -1,25 +1,7 @@
 <script lang="ts">
-	import { page } from "$app/stores";
+    import NavbarItem from "./NavbarItem.svelte";
 	import ThemeToggle from "./ThemeToggle.svelte";
-
-    const navbarEntries = [
-        {
-            name: 'About',
-            href: '/about',
-        },
-        {
-            name: 'Projects',
-            href: '/projects',
-        },
-        {
-            name: 'Blog',
-            href: '/blog',
-        },
-        {
-            name: 'Contact',
-            href: '/contact',
-        }
-    ];
+    import navbarEntries from "$lib/data/sitemap.json";
 </script>
 
 <div class="navbar bg-base-100">
@@ -31,9 +13,7 @@
 
             <ul tabindex="-1" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
             {#each navbarEntries as entry}
-                <li>
-                    <a href={entry.href}>{entry.name}</a>
-                </li>
+                <NavbarItem name={entry.name} href={entry.href} children={entry.children} inDropdown={true} />
             {/each}
             </ul>
         </div>
@@ -44,11 +24,7 @@
     <div class="navbar-center hidden lg:flex">
         <ul class="menu menu-horizontal px-1">
             {#each navbarEntries as entry}
-                <li>
-                    <a href={entry.href}
-                    class:selected={entry.href === $page.url.pathname}
-                    >{entry.name}</a>
-                </li>
+                <NavbarItem name={entry.name} href={entry.href} children={entry.children} />
             {/each}
         </ul>
     </div>
@@ -61,22 +37,5 @@
 <style>
     .title {
         font-family: 'Silkscreen', monospace;
-    }
-
-    .selected {
-        text-shadow: 3px 10px 3px hsla(var(--bc));
-    }
-
-    li > a {
-        font-family: 'Silkscreen', monospace;
-        font-size: medium;
-        transition: transform 0.3s ease, text-shadow 0.3s ease, color 0.3s ease; /* Smooth transition for the tilt and other effects */
-        /* Give them a reflection under */
-    }
-
-    li > a:hover {
-        background-color: inherit;
-        text-shadow: 3px 10px 5px hsla(var(--bc));
-        transform: rotate(-5deg); /* Add a slight tilt */
     }
 </style>

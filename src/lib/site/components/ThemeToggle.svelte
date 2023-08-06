@@ -24,10 +24,8 @@
     }
 </script>
 
-<button on:click={toggleTheme} on:keydown={toggleTheme}>
-    {#if $themeState === 'dark'}
-        <MoonIcon />
-    {:else}
-        <SunIcon />
-    {/if}
-</button>
+<label class="swap swap-rotate">
+    <input on:change={toggleTheme} type="checkbox" />
+    <SunIcon class="swap-on" />
+    <MoonIcon class="swap-off" />
+</label>

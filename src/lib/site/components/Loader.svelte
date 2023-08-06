@@ -32,7 +32,6 @@
     </div>
 </div>
 
-
 <style>
     .loader-container {
         position: fixed; /* Fixed positioning ensures the loader covers the entire viewport */

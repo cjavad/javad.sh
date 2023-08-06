@@ -6,6 +6,7 @@
 	import { fade } from 'svelte/transition';
 	import { afterNavigate, beforeNavigate } from '$app/navigation';
 	import Navbar from '$lib/site/components/Navbar.svelte';
+	import Footer from '$lib/site/components/Footer.svelte';
 
     beforeNavigate(() => {
         isLoading.set(true);
@@ -23,13 +24,6 @@
 <link rel="preload" as="style" href={googleFonts}>
 <link rel="stylesheet" href={googleFonts}>
 
-<style>
-    * {
-        font-family: 'Zilla Slab', sans-serif;
-        font-weight: 400;
-    }
-</style>
-
 <div transition:fade>
     {#if $isLoading}
         <div out:fade={{ delay: 250 }}>
@@ -37,6 +31,10 @@
         </div>
     {:else}
         <Navbar />
-        <slot />
+        <div class="min-h-screen flex flex-col justify-center items-center">
+            <slot />
+        </div>
     {/if}
 </div>
+
+<Footer />
