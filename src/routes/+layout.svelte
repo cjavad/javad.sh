@@ -69,4 +69,9 @@
     {@render children()}
 </MainLayout>
 
-<!-- Language selector is now visible in the main layout -->
+<!-- https://inlang.com/m/gerre34r/library-inlang-paraglideJs/sveltekit -->
+<div class="hidden">
+	{#each locales as locale}
+		<a href={localizeHref(page.url.pathname, { locale })}>{locale}</a>
+	{/each}
+</div>
