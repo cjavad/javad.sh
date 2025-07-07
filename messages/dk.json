@@ -1,0 +1,13 @@
+{
+	"$schema": "https://inlang.com/schema/inlang-message-format",
+	"root": {
+		"short_description": "Laver seje ting med kode"
+	},
+	"privacy": {
+		"short_description": "Simpel og direkte data behandling på javad.sh",
+		"umami_explainer": "Vi bruger det privatlivs fokuseret {umamiLink} på den her side til at indsamle anonymiseret besøgs information, samt andre tekniske data punkter (browser type, land) uden at bruge cookies eller indsamle personlig information. Intet data er gemt om dig, og intet data er delt eller solgt til trejde parter. Alt data behandling sker inden for EU, og under GDPR ejer du dine rettigheder til din egen data, men siden vi ikke indsamler noget om dig personligt, er der ikke noget at hente eller få slettet. Spørgesmål? {contactLink}."
+	},
+	"general": {
+		"back_to_home": "Tilbage hjem"
+	}
+}

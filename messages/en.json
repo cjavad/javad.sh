@@ -1,0 +1,13 @@
+{
+  "$schema": "https://inlang.com/schema/inlang-message-format",
+  "root": {
+    "short_description": "Doing cool stuff with code"
+  },
+  "privacy": {
+    "short_description": "Simple and transparent data practices for javad.sh",
+    "umami_explainer": "This site uses {umamiLink} for privacy-focused analytics, collecting only anonymised page views and basic technical data (browser type, country) without cookies or personal information. No data is stored about you personally, nothing is sold to third parties, and all processing occurs within the EU. Under GDPR you have full rights over your data, but since we don't collect any personal data, there's nothing to access or delete. Questions? {contactLink}."
+  },
+  "general": {
+    "back_to_home": "Back to Home"
+  }
+}
